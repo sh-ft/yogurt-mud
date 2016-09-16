@@ -1,4 +1,5 @@
 {-# OPTIONS_HADDOCK hide #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module Network.Yogurt.IO
   ( writeToTTY, splitAtPrompt
@@ -10,6 +11,7 @@ import System.IO
 import System.Console.Readline
 import Control.Monad (when, liftM)
 import Data.List (elemIndices)
+import Control.Exception
 
 writeToTTY :: String -> IO ()
 writeToTTY msg = do
@@ -45,7 +47,7 @@ splitAtPrompt cs = case elemIndices '\n' cs of
 
 -- Takes an input method and catches errors, returning results in the Maybe monad.
 maybeInput :: IO String -> IO (Maybe String)
-maybeInput input = fmap Just input `catch` const (return Nothing)
+maybeInput input = fmap Just input `catch` (\(_ :: SomeException) -> return Nothing)
 
 -- Waits for input, but once the first character is read, waits
 -- no longer than the specified number of ms before giving up.
