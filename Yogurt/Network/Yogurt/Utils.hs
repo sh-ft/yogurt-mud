@@ -26,8 +26,7 @@ import Network.Yogurt.Mud
 import Control.Concurrent
 import Control.Monad
 
-import Data.Time.Format (formatTime)
-import System.Locale (defaultTimeLocale)
+import Data.Time.Format (formatTime, defaultTimeLocale)
 import Data.Time.LocalTime (getZonedTime)
 
 
@@ -83,7 +82,7 @@ type Interval = Int
 mkTimer :: Interval -> Mud a -> Mud Timer
 mkTimer interval prog = do
     vActive <- mkVar True
-    
+
     let timerCycle :: RunMud -> IO ()
         timerCycle runMud = do
           threadDelay (1000 * interval)  -- interval in ms, threadDelay expects micros
